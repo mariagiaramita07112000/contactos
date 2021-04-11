@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
-import  forms
-import config
+from config import *
 
 app= Flask(__name__)
+app.secret_key="CLAVEDEMARIA" 
 
 
 conn= sqlite3.connect("data/basedecontactos.db")
@@ -65,17 +65,17 @@ def update_contactos(id):
         c=conn.cursor()
 
         c.execute("""UPDATE flask_contactos
-        SET  fullname= %s ,
-            phone= %s ,
-            email= %s, 
-        WHERE id= %s
-        """, (fullname, phone, email, id))
+        SET  fullname= '%s' ,
+            phone= '%s' ,
+            email= '%s'
+        WHERE id= '%s'
+        """ % (fullname, phone, email, id))
 
-        c.commit()
-        c.close()
+        conn.commit()
+        conn.close()
 
         flash('contacto actualizado sactifactoriamente')
-        return redirect(url_for('index.html'))
+        return redirect(url_for('index'))
 
 @app.route('/delete/<string:id>')
 def delete_contacto(id):
